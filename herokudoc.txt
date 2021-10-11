@@ -1,0 +1,44 @@
+heroku login
+create Procfile (web: vendor/bin/heroku-php-apache2 public/) web: vendor/bin/heroku-php-apache2
+git init
+heroku create
+git add .
+git commit -m "Initial Commit"
+git push heroku master
+heroku open
+
+
+
+#Changes uplaod in heroku step
+
+git status
+git add .
+git commit -m "All changes done"
+git push heroku master
+
+
+#Upload project on github (https://www.youtube.com/watch?v=86WSZcsjNRc)
+
+React, NodeJS, Express & MongoDB - The MERN Fullstack Guide
+
+npm install -g create-react-app
+create-react-app my-app
+cd my-app
+git init
+heroku create -b https://github.com/mars/create-react-app-buildpack.git
+git add .
+git commit -m "react-create-app on Heroku"
+git push heroku master
+heroku open
+
+
+
+http://technomile.github.io/wordpress/setup.html
+
+heroku domains:add www.wordpressheroku.com
+
+
+mysqldump -h ckshdphy86qnz0bj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com -u wr27z9s7nj2eq3dy -ppalcm07llm6gcg1t cd8mku3pz129dz4c > backup.sql
+mysql -h ckshdphy86qnz0bj.cbetxkdyhwsb.us-east-1.rds.amazonaws.com -u wr27z9s7nj2eq3dy -ppalcm07llm6gcg1t cd8mku3pz129dz4c > backup.sql
+
+mysql -h localhost -u root -p ex_hw < backup.sql

@@ -1,0 +1,51 @@
+https://www.youtube.com/watch?v=skGZ8laUQco
+https://juangsalazprabowo.medium.com/how-to-deploy-a-laravel-app-into-heroku-df55efbf8e4e
+
+https://www.youtube.com/watch?v=58doCba2rHA
+
+https://appdividend.com/2018/04/17/how-to-deploy-laravel-project-on-heroku/
+
+https://www.youtube.com/watch?v=7U_skSqlI1E&list=RDCMUCnj1BK9TU32-bOlZ9415fuw&index=2
+
+
+
+https://shamsuljewel.medium.com/make-a-shopify-app-with-laravel-framework-724c7095815c
+
+https://weeklyhow.com/shopify-app-development-with-laravel/
+
+
+App/Providers/AppServiceProvider.php
+// Import Schema
+use Illuminate\Support\Facades\Schema;
+// ...
+
+class AppServiceProvider extends ServiceProvider
+{
+
+public function boot()
+{
+    // Add the following line
+    Schema::defaultStringLength(191);
+}
+
+// ...
+
+}
+
+php artisan migrate
+
+composer require laravel/ui
+php artisan ui bootstrap --auth
+npm install
+npm run dev
+
+composer global require laravel/valet --dev
+https://gist.github.com/ccjeng/11284024
+
+php artisan vendor:publish --tag=shopify-migrations && php artisan migrate
+
+
+composer require laravel/ui 
+php artisan ui bootstrap --auth 
+npm install
+npm run dev

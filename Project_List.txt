@@ -1,0 +1,246 @@
+Google Searching Code
+----------------------------------------------
+
+Google analystics check for search in google(Google Search Console tool, Google Tag Assistant)
+google analystics setup video (https://www.youtube.com/watch?v=khE3BLejaWw)
+
+
+# Max mega menu mate "Elements Kit" plugin use
+# Use for tab plugin "from shortcodes plugin"
+# Use category wise post display "https://wordpress.org/plugins/category-ajax-filter/"
+#Use for contact form 7 If mail are not send so use this plugin (WP Mail SMTP by WPForms)
+
+#Use for add total count product price (woocommerce-product-addons plugin)
+#Google review for use plugin (Trustindex plugin)
+
+
+Project List
+---------------------------------------------
+
+innovodentalimplants.com
+canadianbucketlist.com
+trimingwaladeepak.com
+hallwoodmodular.com
+pt2.qwertyitservices.com
+springmedicalcentre.com
+islandpatiofurniture.ca
+
+
+
+
+Project Custom Code
+---------------------------------------------
+
+<?php
+/**
+ * Extra files & functions are hooked here.
+ *
+ * Displays all of the head element and everything up until the "site-content" div.
+ *
+ * @package Avada
+ * @subpackage Core
+ * @since 1.0
+ */
+
+// Do not allow directly accessing this file.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 'Direct script access denied.' );
+}
+
+if ( ! defined( 'AVADA_VERSION' ) ) {
+	define( 'AVADA_VERSION', '7.4.1' );
+}
+
+if ( ! defined( 'AVADA_MIN_PHP_VER_REQUIRED' ) ) {
+	define( 'AVADA_MIN_PHP_VER_REQUIRED', '5.6' );
+}
+
+if ( ! defined( 'AVADA_MIN_WP_VER_REQUIRED' ) ) {
+	define( 'AVADA_MIN_WP_VER_REQUIRED', '4.9' );
+}
+
+// Developer mode.
+if ( ! defined( 'AVADA_DEV_MODE' ) ) {
+	define( 'AVADA_DEV_MODE', false );
+}
+
+/**
+ * Compatibility check.
+ *
+ * Check that the site meets the minimum requirements for the theme before proceeding.
+ *
+ * @since 6.0
+ */
+if ( version_compare( $GLOBALS['wp_version'], AVADA_MIN_WP_VER_REQUIRED, '<' ) || version_compare( PHP_VERSION, AVADA_MIN_PHP_VER_REQUIRED, '<' ) ) {
+	require_once get_template_directory() . '/includes/bootstrap-compat.php';
+	return;
+}
+
+/**
+ * Bootstrap the theme.
+ *
+ * @since 6.0
+ */
+require_once get_template_directory() . '/includes/bootstrap.php';
+
+/* Omit closing PHP tag to avoid "Headers already sent" issues. */
+
+/* */
+
+function custom_scripts() {
+    wp_enqueue_style( 'custom-css', get_template_directory_uri() . '/assets/css/custom.css' );
+}
+add_action( 'wp_enqueue_scripts', 'custom_scripts' );
+
+function fusion_element_faqpages() {
+
+fusion_builder_map( 
+    array(
+        'name'            => esc_attr__( 'Custom Post cards', 'fusion-builder' ),
+        'shortcode'       => 'fusion_custom_post_card',
+        'icon'            => 'fusiona-post-cards-element',
+        'allow_generator' => true,
+		'add_edit_items'  => '',
+        'params'          => array(
+			array(
+				'type'        => 'range',
+				'heading'     => esc_attr__( 'Number of Posts', 'fusion-builder' ),
+				'description' => esc_attr__( 'Select number of posts per page.', 'fusion-builder' ),
+				'param_name'  => 'post_card_per_page',
+				'value'       => '8',
+				'min'         => '0',
+				'max'         => '50',
+				'step'        => '1',
+            ),
+			array(
+				'type'        => 'radio_button_set',
+			    'heading'     => esc_attr__( 'Order', 'fusion-builder' ),
+			    'description' => esc_attr__( '', 'fusion-builder' ),
+			    'param_name'  => 'custom_order_postds_card',
+			    'value'       => array(
+					'asc' => esc_attr__( 'Ascending', 'fusion-builder' ),
+					'des'  => esc_attr__( 'Descending', 'fusion-builder' ),
+			   ),
+			),
+			
+        ),
+    ) 
+);
+}
+add_action( 'fusion_builder_before_init', 'fusion_element_faqpages' );
+
+function fusion_faqpages_output($atts){
+    ob_start();
+
+	if( $atts['custom_order_postds_card'] == '' ){
+		$order = "ASC";
+	} else {
+		$order = $atts['custom_order_postds_card'];
+	}
+	$prod_terms = get_terms( array( 
+		'taxonomy' => 'product_cat',
+		'parent'   => 0,
+		'order' => $order,
+		'number' => $atts['post_card_per_page'],
+	) );
+	?>
+	<div class="postcard-cat-wrap"><?php 
+		foreach( $prod_terms as $prod_term ){ 
+			$thumbnail_id = get_term_meta( $prod_term->term_id, 'thumbnail_id', true );
+			$image = wp_get_attachment_url( $thumbnail_id );?>
+				<div class="postcard-cat-list" style="background-image:url( <?php echo wp_get_attachment_url( $thumbnail_id ); ?>)">
+					<div class="postcard-cat-front"><?php 
+						$thumbnail_id = get_term_meta( $prod_term->term_id, 'thumbnail_id', true );
+						$image = wp_get_attachment_url( $thumbnail_id );?>
+						<div class="postcard-cat-name" style="background-color:<?php _e( get_field( 'post_cards_color', $prod_term ) ); ?>">	
+							<h3><a href="<?php _e( get_term_link( $prod_term->term_id ) )?>"><?php echo $prod_term->name; ?></a></h3>
+							<p><?php echo $prod_term->description;?></p>
+							<?php
+								$field_open_tab = get_field( 'checkbox', $prod_term );
+								$field_link = get_field( 'link', $prod_term );
+								if( $field_open_tab ):
+								$link_target = $field_open_tab['target'] ? $field_open_tab['target'] : '_blank';?>
+									<a href="<?php echo esc_url( $field_link ); ?>" target="<?php echo esc_attr( $link_target ); ?>"><span><?php echo $field_val; ?></span></a>
+								<?php endif;
+								$field_val = get_field( 'change_shop_button', $prod_term );
+								if ( $field_val ):?>
+									<a class="target-info" href="<?php echo esc_url( $field_link ); ?>"><span><?php echo $field_val; ?></span></a>
+								<?php else: ?>
+									<a href="<?php _e( get_term_link( $prod_term->term_id ) )?>"><span>Shop Now</span></a>
+							<?php endif; ?>
+							
+						</div>	
+					</div>
+				</div>
+		<?php } ?>
+	</div><?php 
+    return ob_get_clean();
+}
+add_shortcode('fusion_custom_post_card','fusion_faqpages_output');
+
+
+
+/* variation product code */
+//add_shortcode('tag1', 'add_custom_addtocart_and_checkout');
+add_action( 'woocommerce_after_add_to_cart_button', 'add_custom_addtocart_and_checkout' );
+function add_custom_addtocart_and_checkout() {
+    global $product;
+
+    $addtocart_url = wc_get_checkout_url().'?add-to-cart='.$product->get_id();
+    $button_class  = 'single_add_to_cart_button button alt custom-checkout-btn';
+    $button_text   = __("Buy Now", "woocommerce");
+
+    if( $product->is_type( 'simple' )) :
+    ?>
+    <script>
+    jQuery(function($) {
+        var url    = '<?php echo $addtocart_url; ?>',
+            qty    = 'input.qty',
+            button = 'a.custom-checkout-btn';
+
+        // On input/change quantity event
+        $(qty).on('input change', function() {
+            $(button).attr('href', url + '&quantity=' + $(this).val() );
+        });
+    });
+    </script>
+    <?php
+
+    elseif( $product->is_type( 'variable' ) ) : 
+
+    $addtocart_url = wc_get_checkout_url().'?add-to-cart=';
+    ?>
+    <script>
+    jQuery(function($) {
+        var url    = '<?php echo $addtocart_url; ?>',
+            vid    = 'input[name="variation_id"]',
+            pid    = 'input[name="product_id"]',
+            qty    = 'input.qty',
+            button = 'a.custom-checkout-btn';
+
+        // Once DOM is loaded
+        setTimeout( function(){
+            if( $(vid).val() != '' ){
+                $(button).attr('href', url + $(vid).val() + '&quantity=' + $(qty).val() );
+            }
+        }, 300 );
+
+        // On input/change quantity event
+        $(qty).on('input change', function() {
+            if( $(vid).val() != '' ){
+                $(button).attr('href', url + $(vid).val() + '&quantity=' + $(this).val() );
+            }
+        });
+
+        // On select attribute field change event
+        $('.variations_form').on('change blur', 'table.variations select', function() {
+            if( $(vid).val() != '' ){
+                $(button).attr('href', url + $(vid).val() + '&quantity=' + $(qty).val() );
+            }
+        });
+    });
+    </script>
+    <?php
+    endif;
+    echo '<a href="'.$addtocart_url.'" class="'.$button_class.'">'.$button_text.'</a>';
+}

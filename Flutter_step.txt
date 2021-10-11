@@ -1,0 +1,20 @@
+1) Downlaod android studio
+2) Downlaod jdk (set in edit envioment)
+3) Flutter and dart plugin downlaod in Android studio
+4) Flutter zip downlaod on flutter site
+5) Flutter bin folder path set in path location
+6) Testing in cmd (Flutter doctor)
+7) Flutter project popup window -> new flutter project -> set path c:/sdk/flutter
+
+
+
+
+
+
+App list
+
+- Check udemy video
+- Chat App
+- Tiktok App
+- Video edit App
+- 
